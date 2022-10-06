@@ -1,0 +1,32 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+
+    margin: 0;
+
+}
+
+.container-survey {
+
+    border: 20px solid white;
+    background-color: steelblue;
+    height: 100vh;
+    width: 100vw;
+
+}
+
+.container-player {
+    border: 2px solid white;
+    margin: 3rem auto 1rem;
+    max-width: 400px;
+    height: 100px;
+}
+
+.container-paleta {
+    max-width: 600px;
+    margin: 0 auto;
+    border: 3px solid khaki;
+    text-align: center;
+}
