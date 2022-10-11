@@ -2,10 +2,32 @@
     box-sizing: border-box;
 }
 
+:root {
+    --color-red:red;
+    --color-orange: orange;
+    --color-yellow: yellow;
+    --color-green: green;
+    --color-cyan: cyan;
+    --color-blue: blue;
+    --color-violet: violet;
+    --color-magenta: magenta;
+    --color-gray: gray;
+}
+
 body {
 
     margin: 0;
 
+}
+
+.page {
+    width: 100vw;
+    height: 100vh;
+}
+
+.first-page {
+    display: grid;
+    place-content: center;
 }
 
 .container-survey {
