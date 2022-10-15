@@ -22,7 +22,7 @@ function(nat, age, mxp, mls, so1, so2, so3) {
   time <- as.character(Sys.time())
   
   cat(
-    paste(time, nat, age, mxp, mls, so1, so2, paste0(so3, '/n'), sep = ";"),
+    paste(time, nat, age, mxp, mls, so1, so2, paste0(so3, '\n'), sep = ";"),
     file="output.txt",
     append=TRUE
   )

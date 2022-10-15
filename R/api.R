@@ -39,4 +39,5 @@ plumberDeploy::do_deploy_api(320705693, path="api", localPath = "/Users/tiago/Do
 
 plumberDeploy::do_remove_api(320705693, path="api", delete = TRUE)
 
+
 #http://127.0.0.1:8000/save?nat=bra%20hsaha&age=42&mxp=2&mls=1&so1=321&so2=2344&so3=12
