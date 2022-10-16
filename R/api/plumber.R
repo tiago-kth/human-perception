@@ -15,14 +15,14 @@ function() {
 #* @param so2 Colors for second song
 #* @param so3 Colors for thrid song
 #* @get /save
-function(nat, age, mxp, mls, so1, so2, so3) {
+function(age, nat, gnd, ins, instxt, mxp, mxptext, genres, colors) {
   
   #print(nat)
   
   time <- as.character(Sys.time())
   
   cat(
-    paste(time, nat, age, mxp, mls, so1, so2, paste0(so3, '\n'), sep = ";"),
+    paste(time, age, nat, gnd, ins, instxt, mxp, mxptext, genres, paste0(colors, '\n'), sep = ";"),
     file="output.txt",
     append=TRUE
   )
@@ -32,5 +32,5 @@ function(nat, age, mxp, mls, so1, so2, so3) {
 #* Get data from server
 #* @get /get
 function(req, res){
-  include_file("output.txt", res)
+  include_file("output.txt", res, "text/plain")
 }
