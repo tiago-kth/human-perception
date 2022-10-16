@@ -27,89 +27,131 @@ colors.forEach(color => {
 
 // CANVAS
 
-const cv = document.querySelector('canvas');
-const ctx = cv.getContext('2d');
+class Question {
+    
+    // canvas element
+    cv;
 
-const cv_w = +window.getComputedStyle(cv).width.slice(0,-2);
-const cv_h = +window.getComputedStyle(cv).height.slice(0,-2);
+    // canvas context
+    ctx;
 
-cv.width = cv_w * 2;
-cv.height = cv_h * 2;
+    // parameters
+    cv_w;
+    cv_h;
+    smallest;
+    sq_side;
 
-const smallest = Math.min(cv_h, cv_h);
+    // the squares array
+    squares = [];
 
-const sq_side = Math.round(smallest / 24) * 2;
+    // the selected colors array, for this question
+    selected_colors = [];
 
-const I = Math.round(cv_w * 2 / sq_side);
-const J = Math.round(cv_h * 2 / sq_side);
+    constructor(question_number) {
 
-const squares = [];
+        const cv = document.querySelector(`[data-question='${question_number}'] canvas`);
+        const ctx = cv.getContext('2d');
 
-for (let i = 0; i <= I; i++) {
+        this.cv = cv;
+        this.ctx = ctx;
 
-    for (let j = 0; j <= J; j++) {
+        const cv_w = +window.getComputedStyle(cv).width.slice(0,-2);
+        const cv_h = +window.getComputedStyle(cv).height.slice(0,-2);
 
-        const sq = {
-            i : i,
-            j : j,
-            x0 : i * sq_side,
-            y0 : j * sq_side,
-            color : ''
+        this.cv_h = cv_h;
+        this.cv_w = cv_w;
+
+        cv.width = cv_w * 2;
+        cv.height = cv_h * 2;
+
+        const smallest = Math.min(cv_h, cv_h);
+
+        this.smallest = smallest;
+
+        const sq_side = Math.round(smallest / 24) * 2;
+
+        this.sq_side = sq_side;
+
+        const I = Math.round(cv_w * 2 / sq_side);
+        const J = Math.round(cv_h * 2 / sq_side);
+
+        for (let i = 0; i <= I; i++) {
+
+            for (let j = 0; j <= J; j++) {
+
+                const sq = {
+                    i : i,
+                    j : j,
+                    x0 : i * sq_side,
+                    y0 : j * sq_side,
+                    color : ''
+                }
+
+                this.squares.push(sq);
+
+            }
+
         }
 
-        squares.push(sq);
+        this.monitor_color_buttons(question_number);
 
+    }
+
+    monitor_color_buttons(question_number) {
+
+        const color_buttons = document.querySelector(`[data-question='${question_number}'] .palette`);
+
+        color_buttons.addEventListener('click', e => this.update_colors(e));
+
+    }
+
+    update_colors(e) {
+
+        e.target.classList.toggle('selected');
+    
+        if (e.target.classList.contains('swatch')) {
+    
+            const selected_color = e.target.style.getPropertyValue('--color');
+    
+            if ( this.selected_colors.includes(selected_color) ) {
+    
+                this.selected_colors = this.selected_colors.filter(color => color != selected_color)
+    
+            } else {
+                this.selected_colors.push(selected_color);
+            }
+    
+        }
+    
+        this.set_colors(this.selected_colors);
+    
+    }
+
+    set_colors(color_list) {
+
+        const n = color_list.length;
+        const sq_side = this.sq_side;
+    
+        this.squares.forEach(sq => {
+    
+            const color = n == 0 ? 'white' : color_list[ (sq.i + sq.j) % n ];
+    
+            this.ctx.fillStyle = color;
+            this.ctx.fillRect(sq.x0, sq.y0, sq_side, sq_side);
+            this.ctx.fill();
+    
+            //console.log(sq.i, sq.j, (sq.i + sq.j) % n , color)
+    
+        });
+    
     }
 
 }
 
-function set_colors(color_list) {
+const question01 = new Question('01');
 
-    const n = color_list.length;
 
-    squares.forEach(sq => {
 
-        const color = n == 0 ? 'white' : color_list[ (sq.i + sq.j) % n ];
-
-        ctx.fillStyle = color;
-        ctx.fillRect(sq.x0, sq.y0, sq_side, sq_side);
-        ctx.fill();
-
-        //console.log(sq.i, sq.j, (sq.i + sq.j) % n , color)
-
-    });
-
-}
-
-// SELECAO
-
-let selected_colors = [];
-
-const color_buttons = document.querySelector('.palette');
-
-color_buttons.addEventListener('click', update_colors);
-
-function update_colors(e) {
-
-    e.target.classList.toggle('selected');
-
-    if (e.target.classList.contains('swatch')) {
-
-        const selected_color = e.target.style.getPropertyValue('--color');
-
-        if ( selected_colors.includes(selected_color) ) {
-
-            selected_colors = selected_colors.filter(color => color != selected_color)
-
-        } else {
-            selected_colors.push(selected_color);
-        }
-
-    }
-
-    set_colors(selected_colors);
-
-}
 
 
 
