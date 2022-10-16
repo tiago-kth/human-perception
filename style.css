@@ -23,6 +23,10 @@ body {
 
 }
 
+h2, p.question-text {
+    text-align: center;
+}
+
 audio {
     font-family: 'Atkinson Hyperlegible';
 }
@@ -132,7 +136,8 @@ audio {
 
 .form-container {
     margin-top: 2rem;
-    background-color: wheat;
+    border-top: 5px dotted crimson;
+    border-bottom: 5px dotted crimson;
 
 }
 

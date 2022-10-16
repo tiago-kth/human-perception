@@ -11,6 +11,9 @@ const root = document.documentElement;
 // CANVAS
 
 class Question {
+
+    //
+    question_number
     
     // canvas element
     cv;
@@ -31,6 +34,8 @@ class Question {
     selected_colors = [];
 
     constructor(question_number) {
+
+        this.question_number = question_number;
 
         const cv = document.querySelector(`[data-question='${question_number}'] canvas`);
         const ctx = cv.getContext('2d');
@@ -148,10 +153,62 @@ class Question {
     
     }
 
+    get_colors_string() {
+
+        if (this.selected_colors.length > 0) {
+            return this.selected_colors.reduce( (ac, cv) => ac + ',' + cv, this.question_number)
+        }
+        else {
+            return 'empty'
+        }
+        
+    }
+
 }
 
 const question01 = new Question('01');
 const question02 = new Question('02');
+const question03 = new Question('03');
+const question04 = new Question('04');
+const question05 = new Question('05');
+const question06 = new Question('06');
+
+// FORM DATA
+
+function get_radio_value(name) {
+
+    let vl;
+
+    var buttons = document.getElementsByName(name);
+
+    buttons.forEach(button => {
+        console.log(button, button.checked, button.value);
+        if (button.checked) {
+            vl = button.value
+        }
+    })
+
+    return vl;
+          
+}
+
+const age = document.querySelector('#form-age').value;
+const nationality = document.querySelector('#form-nationality').value;
+const gender = get_radio_value('gender');
+const instrument = get_radio_value('instrumentyn');
+const instrument_text = document.querySelector('#form-which-instrument').value;
+const music_xp = get_radio_value('musicexperienceyn');
+const music_xp_text = document.querySelector('#form-music-experience-text').value;
+const genres = document.querySelector('#form-music-genres').value;
+
+const colors_q01 = question01.selected_colors;
+
+function validate() {
+
+    console.log(age, nationality, gender, instrument, instrument_text, music_xp, music_xp_text, genres);
+
+
+}
 
 
 
@@ -179,11 +236,11 @@ console.log(api_url);
 
 
 // SUBMIT BUTTON
-
+/*
 const btn_submit = document.querySelector('button[type="submit"]');
 function send() {
     console.log('will send')
     fetch(api_url, {mode: 'no-cors'}).then(console.log("sent"));
 }
 
-btn_submit.addEventListener('click', send)
+btn_submit.addEventListener('click', send)*/
