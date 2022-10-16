@@ -5,6 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>What is the color of this music excerpt?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,18 +20,132 @@
 
         </div>
 
+        <div class="form-container">
+
+            <form>
+
+                <ul>
+
+                    <li>
+                      <label for="form-age">Your age:</label>
+                      <input type="number" id="form-age" name="age" />
+                    </li>
+
+                    <li>
+                        <label for="form-nationality">Your nationality:</label>
+                        <input type="text" id="form-nationality" name="nationality" />
+                      </li>
+
+                    <li>
+                        <fieldset>
+                            <legend>To which gender identity do you most identify?</legend>
+                        
+                            <div>
+                              <input type="radio" id="form-gender-female" name="gender" value="female"
+                                     checked>
+                              <label for="form-gender-female">Female</label>
+                            </div>
+                        
+                            <div>
+                              <input type="radio" id="form-gender-male" name="gender" value="male">
+                              <label for="form-gender-male">Male</label>
+                            </div>
+                        
+                            <div>
+                              <input type="radio" id="form-gender-non-binary" name="gender" value="nonbinary">
+                              <label for="form-gender-non-binary">Non-binary</label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="form-gender-na" name="gender" value="na">
+                                <label for="form-gender-na">Prefer not to say</label>
+                              </div>
+                        </fieldset>
+                    </li>
+
+                    <li>
+                        <fieldset>
+                            <legend>Do you (or did you) play an instrument?</legend>
+                        
+                            <div>
+                              <input type="radio" id="form-instrument-no" name="instrumentyn" value="no"
+                                     checked>
+                              <label for="form-instrument-no">No</label>
+                            </div>
+                        
+                            <div>
+                              <input type="radio" id="form-instrument-yes" name="instrumentyn" value="yes">
+                              <label for="form-instrument-yes">Yes</label>
+                            </div>
+                        </fieldset>
+                    </li>
+
+                    <li>
+                      <label for="form-which-instrument">If you play or used to play an instrument, which instruments? And for how long?</label>
+                      <textarea id="form-which-instrument" name="instrumentwhich">I don't play any instrument.</textarea>
+                    </li>
+
+                    <li>
+                        <fieldset>
+                            <legend>Do you have any experience with creating music?</legend>
+                        
+                            <div>
+                              <input type="radio" id="form-music-experience-no" name="musicexperienceyn" value="no"
+                                     checked>
+                              <label for="form-music-experience-no">No</label>
+                            </div>
+                        
+                            <div>
+                              <input type="radio" id="form-music-experience-yes" name="musicexperienceyn" value="yes">
+                              <label for="form-music-experience-yes">Yes</label>
+                            </div>
+                        </fieldset>
+                    </li>
+
+                    <li>
+                      <label for="form-music-experience-text">If you have any experience creating music, please describe it here.</label>
+                      <textarea id="form-music-experience-text" name="musicexperiencetext">I don't have any experience with creating music.</textarea>
+                    </li>
+
+                    <li>
+                        <label for="form-music-genres">What kinds of genres of music do you listen to? How often?
+                        </label>
+                        <textarea id="form-music-genres" name="musicgenres"></textarea>
+                      </li>
+
+                  </ul>
+
+            </form>
+
+        </div>
+
         <div class="container-song-question">
 
             <canvas></canvas>
 
-            <div class="container-player"></div>
+            <div class="container-inner-question">
 
-            <div class="container-palette">
-                
-                <p>What color do you feel better matches this excerpt?</p>
+                <figure class="container-player">
 
-                <div class="palette">
+                    <figcaption>Listen to this excerpt:</figcaption>
+                    <audio
+                        controls
+                        src="/media/baile-catingoso.mp3">
+                            <a href="/media/baile-catingoso.mp3">
+                                Download audio
+                            </a>
+                    </audio>
+
+                </figure>
+    
+                <div class="container-palette">
                     
+                    <p>What color do you feel better matches this excerpt?</p>
+    
+                    <div class="palette">
+                        <!-- Filled by JS -->
+                    </div>
+    
                 </div>
 
             </div>

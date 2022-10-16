@@ -45,9 +45,9 @@ const J = Math.round(cv_h * 2 / sq_side);
 
 const squares = [];
 
-for (let i = 0; i < I; i++) {
+for (let i = 0; i <= I; i++) {
 
-    for (let j = 0; j < J; j++) {
+    for (let j = 0; j <= J; j++) {
 
         const sq = {
             i : i,
@@ -69,13 +69,13 @@ function set_colors(color_list) {
 
     squares.forEach(sq => {
 
-        const color = color_list[ (sq.i + sq.j) % n ];
+        const color = n == 0 ? 'white' : color_list[ (sq.i + sq.j) % n ];
 
         ctx.fillStyle = color;
         ctx.fillRect(sq.x0, sq.y0, sq_side, sq_side);
         ctx.fill();
 
-        console.log(sq.i, sq.j, (sq.i + sq.j) % n , color)
+        //console.log(sq.i, sq.j, (sq.i + sq.j) % n , color)
 
     });
 

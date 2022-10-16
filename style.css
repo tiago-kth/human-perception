@@ -19,7 +19,12 @@
 body {
 
     margin: 0;
+    font-family: 'Atkinson Hyperlegible';
 
+}
+
+audio {
+    font-family: 'Atkinson Hyperlegible';
 }
 
 .page {
@@ -58,18 +63,39 @@ body {
     border: 1px solid purple;
 }
 
+.container-inner-question {
+
+    width: 350px;
+    max-width: 100%;
+    margin: 2rem auto 0;
+    border: 3px solid black;
+    box-shadow: 5px 5px black;
+    border-radius: 3px;
+    background-color: white;
+    padding: 1rem;
+
+}
+
+.container-player > * {
+    margin: 0 auto;
+}
+
 .container-player {
-    border: 2px solid white;
-    margin: 3rem auto 1rem;
-    max-width: 400px;
-    height: 100px;
+    margin: 0 auto;
+    margin-top: 1em;
+    /*display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;*/
+}
+
+.container-player figcaption {
+    margin-bottom: 1em;
+    text-align: center;
 }
 
 .container-palette {
-    width: 350px;
-    max-width: 100%;
-    margin: 0 auto;
-    border: 3px solid khaki;
+    margin-top: 2em;
     text-align: center;
 }
 
@@ -85,14 +111,15 @@ body {
 
 .swatch {
     --color: grey; /* will be set by JS */
-    border: calc(var(--gap) / 2) solid var(--color); 
+    border: calc(var(--gap) / 3) solid var(--color); 
     width: 100%;
     height: 100%;
     background-color: var(--color);
+    border-radius: 5px;
 }
 
 .swatch:hover {
-    border-color: white;    
+    border-color: grey;    
 }
 
 .swatch.selected {
@@ -100,3 +127,82 @@ body {
     border-color: black;
 
 }
+
+/* FORM */
+
+.form-container {
+    margin-top: 2rem;
+    background-color: wheat;
+
+}
+
+form {
+    /* Center the form on the page */
+    margin: 0 auto;
+    width: 400px;
+    max-width: 100%;
+    padding: 1em;
+    /*border: 1px solid #ccc;
+    border-radius: 1em;*/
+}
+
+form ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+form li + li {
+    margin-top: 1.5em;
+}
+
+form label {
+    /* Uniform size & alignment */
+    text-align: left;
+}
+
+input[type="radio"] {
+    margin-top: -.1em;
+    vertical-align: middle;
+}
+
+fieldset {
+    border-color: #eee;
+}
+
+fieldset div {
+    font-size: .8em;
+}
+
+fieldset div + div {
+    margin-top: .5em;
+}
+
+
+input,
+textarea {
+    /* To make sure that all text fields have the same font settings
+    By default, textareas have a monospace font */
+
+    /* Uniform text field size */
+    box-sizing: border-box;
+
+    /* Match form field borders */
+    border: 1px solid #999;
+}
+
+input:focus,
+textarea:focus {
+    /* Additional highlight for focused elements */
+    border-color: #000;
+}
+
+textarea {
+
+    height: 5em;
+    display: block;
+    margin-top: .5em;
+    width: 100%;
+}
+
+  
