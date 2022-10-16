@@ -8,23 +8,6 @@ const style_root = getComputedStyle( document.documentElement );
 
 const root = document.documentElement;
 
-// MONTA PALETA
-
-const paleta = document.querySelector('.palette');
-
-colors.forEach(color => {
-
-    const swatch = document.createElement('div');
-    swatch.classList.add('swatch');
-    //swatch.style.backgroundColor = color;
-    swatch.style.setProperty('--color', color);
-
-    paleta.appendChild(swatch);
-
-})
-
-
-
 // CANVAS
 
 class Question {
@@ -93,7 +76,26 @@ class Question {
 
         }
 
+        this.build_palette(question_number);
+
         this.monitor_color_buttons(question_number);
+
+    }
+
+    build_palette(question_number) {
+
+        const palette = document.querySelector(`[data-question='${question_number}'] .palette`);
+
+        colors.forEach(color => {
+
+            const swatch = document.createElement('div');
+            swatch.classList.add('swatch');
+            //swatch.style.backgroundColor = color;
+            swatch.style.setProperty('--color', color);
+
+            palette.appendChild(swatch);
+
+        })
 
     }
 
@@ -149,6 +151,7 @@ class Question {
 }
 
 const question01 = new Question('01');
+const question02 = new Question('02');
 
 
 
