@@ -80,6 +80,10 @@ audio {
 
 }
 
+audio {
+    display: block;
+}
+
 .container-player > * {
     margin: 0 auto;
 }
@@ -196,6 +200,10 @@ textarea {
     border: 1px solid #999;
 }
 
+input[type="number"] {
+    width: 3rem;
+}
+
 input:focus,
 textarea:focus {
     /* Additional highlight for focused elements */
@@ -210,4 +218,36 @@ textarea {
     width: 100%;
 }
 
+p.errors-text {
+    color: crimson;
+}
+
+p.errors-text.success {
+    color: darkgreen;
+    text-align: center;
+}
+
+button {
+    display: block;
+    margin: 2rem auto;
+    padding: .5em;
+    font-size: 1em;
+    font-family: inherit;
+    width: 100px;
+
+}
+
+/* snap
+
+.container-questions {
+    overflow: scroll;
+    height: 100vh;
+    scroll-snap-type: block mandatory;
+}
+
+.container-song-question {
+    scroll-snap-align: start;
+}
+
+*/
   

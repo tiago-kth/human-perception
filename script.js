@@ -166,12 +166,17 @@ class Question {
 
 }
 
+const question_numbers = ['01', '02', '03', '04', '05', '06'];
+const questions = question_numbers.map(question_number => new Question(question_number));
+
+/*
 const question01 = new Question('01');
 const question02 = new Question('02');
 const question03 = new Question('03');
 const question04 = new Question('04');
 const question05 = new Question('05');
 const question06 = new Question('06');
+*/
 
 // FORM DATA
 
@@ -182,7 +187,7 @@ function get_radio_value(name) {
     var buttons = document.getElementsByName(name);
 
     buttons.forEach(button => {
-        console.log(button, button.checked, button.value);
+        //console.log(button, button.checked, button.value);
         if (button.checked) {
             vl = button.value
         }
@@ -192,21 +197,62 @@ function get_radio_value(name) {
           
 }
 
-const age = document.querySelector('#form-age').value;
-const nationality = document.querySelector('#form-nationality').value;
-const gender = get_radio_value('gender');
-const instrument = get_radio_value('instrumentyn');
-const instrument_text = document.querySelector('#form-which-instrument').value;
-const music_xp = get_radio_value('musicexperienceyn');
-const music_xp_text = document.querySelector('#form-music-experience-text').value;
-const genres = document.querySelector('#form-music-genres').value;
-
-const colors_q01 = question01.selected_colors;
-
 function validate() {
 
-    console.log(age, nationality, gender, instrument, instrument_text, music_xp, music_xp_text, genres);
+    let age = document.querySelector('#form-age').value;
+    let nationality = document.querySelector('#form-nationality').value;
+    let gender = get_radio_value('gender');
+    let instrument = get_radio_value('instrumentyn');
+    let instrument_text = document.querySelector('#form-which-instrument').value;
+    let music_xp = get_radio_value('musicexperienceyn');
+    let music_xp_text = document.querySelector('#form-music-experience-text').value;
+    let genres = document.querySelector('#form-music-genres').value;
 
+    let errors = [];
+
+    if (age == '') errors.push('age');
+    if (nationality == '') errors.push('nationality');
+    if (genres == '') errors.push('music genres');
+
+    questions.forEach(question => {
+        if (question.get_colors_string() == 'empty') {
+            errors.push('color selection for excerpt ' + question.question_number)
+        }
+    })
+
+    const colors_string = questions
+      .map(q => q.get_colors_string())
+      .reduce( (pr, cv) => pr + ' ' + cv);
+
+    console.log(colors_string);
+
+    const p_msg = document.querySelector('p.errors-text');
+
+    //console.log(errors);
+    if (errors.length > 0) {
+
+        const errors_text = errors.reduce((pr, cv) => pr + ', ' + cv);
+        p_msg.innerHTML = 'Hmm... some answers are missing. Please check: ' + errors_text;
+        return 'error';
+
+    } else {
+
+        const string = 
+            'age=' + age +
+            '&nat=' + nationality +
+            '&gnd=' + gender +
+            '&ins=' + instrument +
+            '&instxt=' + instrument_text +
+            '&mxp=' + music_xp +
+            '&mxptext=' + music_xp_text +
+            '&genres=' + genres +
+            '&colors=' + colors_string
+        ;
+
+        //console.log(nationality, string);
+        return string;
+
+    }
 
 }
 
@@ -219,28 +265,47 @@ function validate() {
 
 // URL
 
-let [frm_nationality, frm_age, frm_music_xp, frm_music_listening_habits, frm_song1_colors, frm_song2_colors, frm_song3_colors] =['Brasil', '42', 'a', 'd', '341', 3, 2];
+//let [frm_nationality, frm_age, frm_music_xp, frm_music_listening_habits, frm_song1_colors, frm_song2_colors, frm_song3_colors] =['Brasil', '42', 'a', 'd', '341', 3, 2];
 
-let api_url = 'http://137.184.187.148/api/save?'
+let api_url = 'http://137.184.187.148/api/save?' //'http://127.0.0.1:8000/save?'
 
-api_url += 'nat=' + frm_nationality;
-api_url += '&age=' + frm_age;
-api_url += '&mxp=' + frm_music_xp;
-api_url += '&mls=' + frm_music_listening_habits;
-api_url += '&so1=' + frm_song1_colors;
-api_url += '&so2=' + frm_song2_colors;
-api_url += '&so3=' + frm_song3_colors;
 
 console.log(api_url);
 
 
-
 // SUBMIT BUTTON
-/*
-const btn_submit = document.querySelector('button[type="submit"]');
+
+const btn_submit = document.querySelector('button');
+
 function send() {
-    console.log('will send')
-    fetch(api_url, {mode: 'no-cors'}).then(console.log("sent"));
+
+    const p_msg = document.querySelector('p.errors-text');
+
+    p_msg.innerHTML = "Validating..."
+
+    let ans = validate();
+
+    if (ans == 'error') {
+
+        console.log(ans);
+
+    } else {
+
+        api_url += ans;
+
+        console.log('will send: ', api_url);
+
+        p_msg.innerHTML = "Validated! Sending..."
+
+        fetch(api_url, {mode: 'no-cors'}).then(() => {
+            console.log("sent");
+            
+            p_msg.innerHTML = "Thank you very much for your participation! :)";
+            p_msg.classList.add('success');
+        });
+
+    }
+    
 }
 
-btn_submit.addEventListener('click', send)*/
+btn_submit.addEventListener('click', send);
