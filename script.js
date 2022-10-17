@@ -267,7 +267,7 @@ function validate() {
 
 //let [frm_nationality, frm_age, frm_music_xp, frm_music_listening_habits, frm_song1_colors, frm_song2_colors, frm_song3_colors] =['Brasil', '42', 'a', 'd', '341', 3, 2];
 
-let api_url = 'http://137.184.187.148/api/save?' //'http://127.0.0.1:8000/save?'
+let api_url = 'https://kth.tiago.fyi/api/save?' //'http://127.0.0.1:8000/save?'
 
 
 console.log(api_url);
