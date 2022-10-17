@@ -30,6 +30,10 @@ class Question {
     // the squares array
     squares = [];
 
+    // the arcs array
+    arcs = [];
+    R;
+
     // the selected colors array, for this question
     selected_colors = [];
 
@@ -80,6 +84,33 @@ class Question {
             }
 
         }
+
+        // arcs 
+
+        const R = Math.sqrt( Math.pow(cv_h * 2, 2) + Math.pow(cv_w * 2, 2) );
+        this.R = R;
+
+        const arc_count = 32;
+        const theta_inc = Math.PI * 2 / arc_count;
+
+        for (let i = 0; i < arc_count; i++) {
+
+            const theta_i = theta_inc * i;
+            const theta_f = theta_inc * i + theta_inc;
+
+            const xi = Math.cos(theta_i) * R + cv_w;
+            const xf = Math.cos(theta_f) * R + cv_w;
+
+            const yi = Math.sin(theta_i) * R + cv_h;
+            const yf = Math.sin(theta_f) * R + cv_h;
+
+            const arc = {i, theta_i, theta_f, xi, yi, xf, yf};
+
+            this.arcs.push(arc);
+
+        }
+
+        //
 
         this.build_palette(question_number);
 
@@ -151,6 +182,29 @@ class Question {
     
         });
     
+    }
+
+    set_colors_radial(color_list) {
+
+        const n = color_list.length;
+
+        this.arcs.forEach( arc => {
+
+            const color = n == 0 ? 'white' : color_list[ arc.i % n ];
+
+            this.ctx.fillStyle = color;
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.cv_w, this.cv_h);
+            this.ctx.lineTo(arc.xi, arc.yi);
+            this.ctx.arc(this.cv_w, this.cv_h, this.R, arc.theta_i, arc.theta_f, false);
+            this.ctx.lineTo(this.cv_w, this.cv_h);
+            this.ctx.closePath();
+            this.ctx.stroke();
+            this.ctx.fill();
+
+
+        })
+
     }
 
     get_colors_string() {
@@ -267,7 +321,7 @@ function validate() {
 
 //let [frm_nationality, frm_age, frm_music_xp, frm_music_listening_habits, frm_song1_colors, frm_song2_colors, frm_song3_colors] =['Brasil', '42', 'a', 'd', '341', 3, 2];
 
-let api_url = 'https://kth.tiago.fyi/api/save?' //'http://127.0.0.1:8000/save?'
+let api_url = 'https://tiago.fyi/api/save?' //'http://127.0.0.1:8000/save?'
 
 
 console.log(api_url);
