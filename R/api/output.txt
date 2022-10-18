@@ -1,2 +1,4 @@
-Begin
 2022-10-16 21:49:21;42;bra;female;no;I don't play any instrument.;no;I don't have any experience with creating music.;fdjdl;01,cyan 02,orange 03,yellow 04,violet 05,blue 06,magenta
+2022-10-16 20:40:03;43;RECIFE;female;no;I don't play any instrument.;no;I don't have any experience with creating music.;fooio;01,orange 02,yellow 03,yellow 04,orange 05,blue,violet,magenta 06,magenta,green
+2022-10-17 22:57:43;20;HONDURAS;female;no;I don't play any instrument.;no;I don't have any experience with creating music.;whj;01,blue,yellow 02,green,violet 03,orange,blue,violet 04,orange 05,violet 06,green
+2022-10-18 06:48:26;42;Moldávia do Sul;na;yes;I don't play any instrument.;yes;I don't have any experience with creating music.;All;01,green,violet,magenta 02,blue,orange 03,orange,magenta,blue,violet 04,red 05,yellow 06,blue
