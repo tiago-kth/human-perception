@@ -330,34 +330,38 @@ console.log(api_url);
 // SUBMIT BUTTON
 
 const btn_submit = document.querySelector('button');
+const bk_link = document.querySelector('.back-link');
+const p_msg = document.querySelector('p.errors-text');
 
 function send() {
-
-    const p_msg = document.querySelector('p.errors-text');
 
     p_msg.dataset.status = "validating";
 
     p_msg.innerHTML = "Validating..."
+
+    bk_link.classList.add('hidden');
 
     let ans = validate();
 
     if (ans == 'error') {
 
         p_msg.dataset.status = "error";
-        console.log(ans);
+        bk_link.classList.remove('hidden');
+        //console.log(ans);
 
     } else {
 
         api_url += ans;
 
         console.log('will send: ', api_url);
+        p_msg.dataset.status = "sending";
 
         p_msg.innerHTML = "Validated! Sending..."
 
         fetch(api_url, {mode: 'no-cors'}).then(() => {
             console.log("sent");
             
-            p_msg.innerHTML = "Sent! Thank you very much for your participation! :)";
+            p_msg.innerHTML = "Sent! Thank you very much for your participation! If you liked the songs, you can listen to <a href='https://www.youtube.com/watch?v=WEc2KGBMogg'>this full album on Youtube.</a> :)";
             p_msg.dataset.status = "sent";
             btn_submit.disabled = true;
             
@@ -368,3 +372,13 @@ function send() {
 }
 
 btn_submit.addEventListener('click', send);
+
+function back_link_clicked() {
+
+    p_msg.innerHTML = '';
+    p_msg.dataset.status = "unsent";
+    bk_link.classList.add('hidden');
+    
+}
+
+bk_link.addEventListener('click', back_link_clicked);

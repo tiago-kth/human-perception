@@ -269,7 +269,7 @@ p.errors-text[data-status='sent'] {
 }
 
 button {
-    
+
     display: block;
     margin: 2rem auto;
     padding: .5em;
@@ -277,6 +277,10 @@ button {
     font-family: inherit;
     width: 100px;
 
+}
+
+p.back-link.hidden {
+    display: none;
 }
 
 /* snap
