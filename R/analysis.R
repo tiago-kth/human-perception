@@ -28,5 +28,9 @@ data_colors <- data_pre %>%
   separate(colors_ex4, into = paste0('color_ex4_', color_numbers), sep = ',') %>%
   separate(colors_ex5, into = paste0('color_ex5_', color_numbers), sep = ',') %>%
   separate(colors_ex6, into = paste0('color_ex6_', color_numbers), sep = ',') %>%
-  select(-ends_with('_0'))
+  select(-ends_with('_0')) 
+
+data_long <- data_colors %>%
+  mutate(id = row_number()) %>%
+  gather(starts_with('color_ex1_'), key = 'color1', value = 'value1') %>%
 
