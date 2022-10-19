@@ -69,7 +69,7 @@ audio {
 }
 
 .page {
-    width: 100vw;
+    width: 100%;
     height: 100vh;
 }
 
@@ -89,7 +89,7 @@ audio {
 
 .container-song-question {
     position: relative;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     border-top: 3px solid white;
 }
