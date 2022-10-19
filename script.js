@@ -335,12 +335,15 @@ function send() {
 
     const p_msg = document.querySelector('p.errors-text');
 
+    p_msg.dataset.status = "validating";
+
     p_msg.innerHTML = "Validating..."
 
     let ans = validate();
 
     if (ans == 'error') {
 
+        p_msg.dataset.status = "error";
         console.log(ans);
 
     } else {
@@ -354,8 +357,10 @@ function send() {
         fetch(api_url, {mode: 'no-cors'}).then(() => {
             console.log("sent");
             
-            p_msg.innerHTML = "Thank you very much for your participation! :)";
-            p_msg.classList.add('success');
+            p_msg.innerHTML = "Sent! Thank you very much for your participation! :)";
+            p_msg.dataset.status = "sent";
+            btn_submit.disabled = true;
+            
         });
 
     }

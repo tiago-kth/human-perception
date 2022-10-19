@@ -18,9 +18,25 @@
 
             <h1>What is the color of this excerpt?</h1>
 
+            <div class="arrow-start">
+                <a href="#survey">v</a>
+            </div>
+
         </div>
 
-        <div class="form-container">
+        <div class="form-container" id="survey">
+
+            <div class="form-introduction">
+
+                <h2>Welcome!</h2>
+
+                <p>Thank you for taking part in this experiment! It is really quick, it will take only about 5 minutes. It is completely anonymous and we won't collect any data from you, other than the answers you provide to the questions below.</p>
+
+                <p>After the short form below, you will be presented to six different 30s excertps of songs, chosen from a Brazilian musical genre known as "Choro" or "Chorinho". You will then be invited to pick the color (or colors, you can pick more than one) that you think best fits that particular musical excerpt. At the end, you just click on "Send" and that's it!</p>
+
+                <p>Ah, if you like the songs, we can point you to a full album where you can listen more "Chorinho" (but only after you press "Send" &mdash; ha!)</p>
+
+            </div>
 
             <form>
 
@@ -341,12 +357,12 @@
 
                     <button>Send</button>
 
-                    <p class="errors-text"></p>
+                    <p class="errors-text" data-status="unsent"></p>
 
                 </div>
 
             </div>
-            
+
         </div>
 
     </section>
