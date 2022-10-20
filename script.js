@@ -1,6 +1,7 @@
 /* */
 
 
+
 const colors = ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'violet', 'magenta'];
 
 const style_root = getComputedStyle( document.documentElement );
@@ -231,6 +232,127 @@ const question04 = new Question('04');
 const question05 = new Question('05');
 const question06 = new Question('06');
 */
+
+// FIRST PAGE
+
+class FirstPage {
+
+    // canvas element
+    cv;
+
+    // canvas context
+    ctx;
+
+    // parameters
+    cv_w;
+    cv_h;
+    smallest;
+    sq_side;
+
+    // the squares array
+    squares = [];
+
+    colors;
+
+    I;
+    J;
+
+    constructor(colors) {
+
+        this.colors = colors;
+
+
+        const cv = document.querySelector('.first-page canvas');
+        const ctx = cv.getContext('2d');
+
+        this.cv = cv;
+        this.ctx = ctx;
+
+        const cv_w = +window.getComputedStyle(cv).width.slice(0,-2);
+        const cv_h = +window.getComputedStyle(cv).height.slice(0,-2);
+
+        this.cv_h = cv_h;
+        this.cv_w = cv_w;
+
+        cv.width = cv_w * 2;
+        cv.height = cv_h * 2;
+
+        const smallest = Math.min(cv_h, cv_h);
+
+        this.smallest = smallest;
+
+        const sq_side = Math.round(smallest / 24) * 2;
+
+        this.sq_side = sq_side;
+
+        const I = Math.round(cv_w * 2 / sq_side);
+        const J = Math.round(cv_h * 2 / sq_side);
+
+        this.I = I;
+        this.J = J;
+
+        for (let i = 0; i <= I; i++) {
+
+            for (let j = 0; j <= J; j++) {
+
+                const sq = {
+                    i : i,
+                    j : j,
+                    x0 : i * sq_side,
+                    y0 : j * sq_side,
+                    color : ''
+                }
+
+                this.squares.push(sq);
+
+            }
+
+        }
+
+        this.set_colors();
+
+    }
+
+    set_colors() {
+
+        const n = this.colors.length;
+        const sq_side = this.sq_side;
+    
+        this.squares.forEach(sq => {
+
+            const dice = Math.random();
+            //let dice = perlin.get(sq.i / this.I, sq.j / this.J);
+            //dice = dice / 2 + 0.5
+
+            let color;
+
+            const white_probability = 0.4;
+
+            if (dice < white_probability) color = 'white';
+            else {
+
+                const index = Math.round( ( (1 - dice) / (1 - white_probability) ) * n  );
+
+                color = this.colors[index];
+
+            }
+    
+            this.ctx.fillStyle = color;
+            this.ctx.fillRect(sq.x0, sq.y0, sq_side, sq_side);
+            this.ctx.fill();
+    
+            //console.log(sq.i, sq.j, (sq.i + sq.j) % n , color)
+    
+        });
+    
+    }
+
+}
+
+const opening = new FirstPage(colors);
+
+
+
 
 // FORM DATA
 

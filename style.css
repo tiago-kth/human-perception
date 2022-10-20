@@ -38,7 +38,7 @@ h1 {
 .arrow-start {
 
     text-align: center;
-    color: #999;
+    color: black;
     font-weight: 100;
     letter-spacing: .01em;
     box-sizing: border-box;
@@ -85,6 +85,7 @@ audio {
 .first-page {
     display: grid;
     place-content: center;
+    position: relative;
 }
 
 .rainbow {
@@ -259,7 +260,8 @@ audio {
     border-top: 3px solid white;
 }
 
-.container-song-question canvas {
+.container-song-question canvas,
+.first-page canvas {
     position: absolute;
     z-index: -1;
     top: 0;
