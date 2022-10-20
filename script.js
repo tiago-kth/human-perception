@@ -445,10 +445,6 @@ function validate() {
 
 let api_url = 'https://tiago.fyi/api/save?' //'http://127.0.0.1:8000/save?'
 
-
-console.log(api_url);
-
-
 // SUBMIT BUTTON
 
 const btn_submit = document.querySelector('button');
