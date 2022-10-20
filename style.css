@@ -29,6 +29,12 @@ h2, p.question-text {
     text-align: center;
 }
 
+h1 {
+    background-color: white;
+    padding: .3rem;
+    text-align: center;
+}
+
 .arrow-start {
 
     text-align: center;
@@ -42,6 +48,9 @@ h2, p.question-text {
     animation: bounce 2s infinite;
     transition: opacity 1s 2s;
     margin-top: 2rem;
+    max-width: 20px;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .arrow-start a {
@@ -77,6 +86,162 @@ audio {
     display: grid;
     place-content: center;
 }
+
+.rainbow {
+
+    /*animation: move 3s infinite;*/
+    --angle: 90deg;
+
+    background: linear-gradient(
+        var(--angle),
+        red 12.5%,
+        orange 12.5% 25%,
+        yellow 25% 37.5%,
+        green 37.5% 50%,
+        cyan 50% 62.5%,
+        blue 62.5% 75%,
+        violet 75% 87.5%,
+        magenta 87.5%
+    );
+
+    /*animation: turn 2s infinite;*/
+}
+
+/*
+@keyframes turn {
+    0%, 100% {
+        --angle: 0deg;
+    }
+
+    50% {
+        --angle: 90deg;
+    }
+}
+*/
+/*
+
+@keyframes move {
+
+    0%, 100% {
+
+        background: linear-gradient(
+            to right,
+            red 12.5%,
+            orange 12.5% 25%,
+            yellow 25% 37.5%,
+            green 37.5% 50%,
+            cyan 50% 62.5%,
+            blue 62.5% 75%,
+            violet 75% 87.5%,
+            magenta 87.5%
+        );
+
+    }
+
+    50% {
+
+        background: linear-gradient(
+            to bottom,
+            red 12.5%,
+            orange 12.5% 25%,
+            yellow 25% 37.5%,
+            green 37.5% 50%,
+            cyan 50% 62.5%,
+            blue 62.5% 75%,
+            violet 75% 87.5%,
+            magenta 87.5%
+        );
+
+        /*background: linear-gradient(
+            to right,
+            magenta 12.5%,
+            red 12.5% 25%,
+            orange 25% 37.5%,
+            yellow 37.5% 50%,
+            green 50% 62.5%,
+            cyan 62.5% 75%,
+            blue 75% 87.5%,
+            violet 87.5%
+        );*/
+        /*
+
+    }
+
+
+}
+
+*/
+
+.halftone {
+
+    --dotSize: 0.25rem;
+    --bgSize: 1.35rem;
+    --bgPosition: calc(var(--bgSize) / 2);
+
+    --stop1: 0.06rem;
+    --stop2: 0.65rem;
+
+    background: white;
+    filter: contrast(50);
+
+    mix-blend-mode: multiply;
+
+}
+
+.halftone::after {
+
+    /* Cover our element */
+    content: '';
+    position: absolute;
+    inset: 0;
+  
+    background-image: radial-gradient(
+        circle at center,
+        black var(--stop1),
+        transparent var(--stop2)
+    ), radial-gradient(
+        circle at center, 
+        black var(--stop1),
+        transparent var(--stop2)
+    );
+    background-size: var(--bgSize) var(--bgSize);
+    background-position: 0 0, var(--bgPosition) var(--bgPosition);
+
+    mask-image: linear-gradient(rgb(0 0 0), rgb(0 0 0 / 0.5));
+    -webkit-mask-image: linear-gradient(rgb(0 0 0), rgb(0 0 0 / 0.5));
+
+}
+
+.halftone::before {
+
+    --color1: magenta;
+    --color2: yellow;
+
+    content: '';
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(45deg, var(--color1), var(--color2));
+    /*animation: turn 2s infinite;*/
+}
+
+/*
+
+@keyframes turn {
+
+    0%, 100% {
+
+        --color1: magenta;
+        --color2: cyan;
+
+    }
+
+    50% {
+        --color1: cyan;
+        --color2: magenta;
+    }
+    
+}*/
 
 .container-survey {
 
