@@ -31,8 +31,13 @@ h2, p.question-text {
 
 h1 {
     background-color: white;
-    padding: .3rem;
+    padding: 0.8rem 0.3rem;
     text-align: center;
+    border: 3px solid black;
+    box-shadow: 5px 5px black;
+    border-radius: 3px;
+    font-size: 3rem;
+    max-width: 300px;
 }
 
 .arrow-start {
@@ -258,6 +263,8 @@ audio {
     width: 100%;
     height: 100vh;
     border-top: 3px solid white;
+    display: grid;
+    place-content: center;
 }
 
 .container-song-question canvas,
@@ -343,8 +350,7 @@ audio {
 /* FORM */
 
 .form-container {
-    margin-top: 2rem;
-    border-top: 5px dotted crimson;
+    margin-top: 1rem;
     border-bottom: 5px dotted crimson;
 
 }
