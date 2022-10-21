@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is the color of this musical Trecho?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+
+    <meta name="author" content="Tiago Maranhao">
+    <meta name="description" content="Uma pesquisa sobre como as pessoas associam cores a música.">
+
+    <meta property="og:image" content="https://tiago-kth.github.io/human-perception/media/thumb.png">
+    <meta property="og:description" content="Uma pesquisa sobre como as pessoas associam cores a música.">
+    <meta property="og:title" content="Qual é a cor desta música?">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Qual é a cor desta música?">
+    <meta name="twitter:description" content="Uma pesquisa sobre como as pessoas associam cores a música.">
+    <meta name="twitter:creator" content="@tiagombp">
+    <meta name="twitter:image" content="https://tiago-kth.github.io/human-perception/media/thumb.png">
+
+</head>
+<body>
+
+    <section>
+
+        <div class="first-page page">
+
+            <canvas></canvas>
+
+            <h1>Qual é a cor desta música?</h1>
+
+            <div class="arrow-start">
+                <a href="#survey">v</a>
+            </div>
+
+        </div>
+
+        <div class="form-container" id="survey">
+
+            <div class="form-introduction">
+
+                <h2>Bem-vindo, bem vinda!</h2>
+
+                <p>
+                    Obrigado por participar deste experimento. Vai ser bem rápido, pouco mais do que 5 minutos. É completamente anônimo, e não vamos coletar nenhum dado além das respostas às perguntas.</p>
+
+                <p>
+                    Depois de um breve questionário, vamos apresentar seis diferentes trechos de músicas, com mais ou menos 30 segundos de duração cada um. Você vai então poder escolher a cor (ou cores, você pode escolher mais de uma) que você sente ser a mais adequada àquela música. No final, basta clicar em "enviar" e pronto.
+                </p>
+
+                <p>
+                    Você pode ouvir às músicas quantas vezes quiser. Como dito, você pode selecionar mais de uma cor, se assim desejar. Cada vez que você clicar numa cor, o fundo vai ser atualizado conforme a seleção de cores, para ajudar a visualizar aquela cor ou combinação de cores. Se você quiser remover uma cor que já foi selecionada, basta clicar sobre o quadradinho dela de novo.
+                </p>
+
+                <p>
+                    No final, depois que você enviar as respostas, indicaremos um link no Youtube onde você pode ouvir mais um pouco de Chorinho de qualidade! :)
+                </p>
+
+            </div>
+
+            <form id="form">
+
+                <p>Primeiro, algumas perguntas sobre você! :)<p>
+
+                <ul>
+
+                    <li>
+                      <label for="form-age">Sua idade:</label>
+                      <input type="number" id="form-age" name="age" />
+                    </li>
+
+                    <li>
+                        <label for="form-nationality">Sua nacionalidade:</label>
+                        <input type="text" id="form-nationality" name="nationality" />
+                    </li>
+
+                    <li>
+                        <fieldset>
+                            <legend>Com qual gênero você se identifica?</legend>
+                        
+                            <div>
+                              <input type="radio" id="form-gender-female" name="gender" value="female"
+                                     checked>
+                              <label for="form-gender-female">Mulher</label>
+                            </div>
+                        
+                            <div>
+                              <input type="radio" id="form-gender-male" name="gender" value="male">
+                              <label for="form-gender-male">Homem</label>
+                            </div>
+                        
+                            <div>
+                              <input type="radio" id="form-gender-non-binary" name="gender" value="nonbinary">
+                              <label for="form-gender-non-binary">Não-binário</label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="form-gender-na" name="gender" value="na">
+                                <label for="form-gender-na">Prefere não dizer</label>
+                              </div>
+                        </fieldset>
+                    </li>
+
+                    <li>
+                        <fieldset>
+                            <legend>Você toca ou já tocou algum instrumento?</legend>
+                        
+                            <div>
+                              <input type="radio" id="form-instrument-no" name="instrumentyn" value="no"
+                                     checked>
+                              <label for="form-instrument-no">Não</label>
+                            </div>
+                        
+                            <div>
+                              <input type="radio" id="form-instrument-yes" name="instrumentyn" value="yes">
+                              <label for="form-instrument-yes">Sim</label>
+                            </div>
+                        </fieldset>
+                    </li>
+
+                    <li>
+                      <label for="form-which-instrument">Se sim, qual ou quais instrumentos? E por quanto tempo?</label>
+                      <textarea id="form-which-instrument" name="instrumentwhich">Eu não toco instrumentos.</textarea>
+                    </li>
+
+                    <li>
+                        <fieldset>
+                            <legend>Você tem experiência com criação / composição de músicas?</legend>
+                        
+                            <div>
+                              <input type="radio" id="form-music-experience-no" name="musicexperienceyn" value="no"
+                                     checked>
+                              <label for="form-music-experience-no">Não</label>
+                            </div>
+                        
+                            <div>
+                              <input type="radio" id="form-music-experience-yes" name="musicexperienceyn" value="yes">
+                              <label for="form-music-experience-yes">Sim</label>
+                            </div>
+                        </fieldset>
+                    </li>
+
+                    <li>
+                      <label for="form-music-experience-text">Se você tem experiência com criação / composição de músicas, por favor descreva um pouco.</label>
+                      <textarea id="form-music-experience-text" name="musicexperiencetext">Eu não tenho experiência com criação de música.</textarea>
+                    </li>
+
+                    <li>
+                        <label for="form-music-genres">Que tipo de música você gosta de ouvir? Com que frequência?
+                        </label>
+                        <textarea id="form-music-genres" name="musicgenres"></textarea>
+                      </li>
+
+                  </ul>
+
+            </form>
+
+        </div>
+
+        <div class="container-questions">
+
+            <div class="container-song-question" data-question="01">
+
+                <canvas></canvas>
+
+                <div class="container-inner-question">
+
+                    <h2>Trecho 01</h2>
+
+                    <figure class="container-player">
+
+                        <figcaption>Ouça este trecho:</figcaption>
+                        <audio
+                            controls
+                            src="../media/01-carinhoso.mp3">
+                                <a href="../media/01-carinhoso.mp3">
+                                    Baixar o trecho
+                                </a>
+                        </audio>
+
+                    </figure>
+        
+                    <div class="container-palette">
+                        
+                        <p>Que cor (ou combinação de cores) você acha que melhor corresponde a esse trecho?</p>
+        
+                        <div class="palette">
+                            <!-- Filled by JS -->
+                        </div>
+        
+                    </div>
+
+                    <p class="question-text">(Quando finalizar a seleção, por favor role a tela até a próxima música.)</p>
+
+                </div>
+
+            </div>
+
+            <div class="container-song-question" data-question="02">
+
+                <canvas></canvas>
+
+                <div class="container-inner-question">
+
+                    <h2>Trecho 02</h2>
+
+                    <figure class="container-player">
+
+                        <figcaption>Ouça este trecho:</figcaption>
+                        <audio
+                            controls
+                            src="../media/02-gosto-que-me-enrosco.mp3">
+                                <a href="../media/02-gosto-que-me-enrosco.mp3">
+                                    Baixar o trecho
+                                </a>
+                        </audio>
+
+                    </figure>
+        
+                    <div class="container-palette">
+                        
+                        <p>Que cor (ou combinação de cores) você acha que melhor corresponde a esse trecho?</p>
+        
+                        <div class="palette">
+                            <!-- Filled by JS -->
+                        </div>
+        
+                    </div>
+
+                    <p class="question-text">(Quando finalizar a seleção, por favor role a tela até a próxima música.)</p>
+
+                </div>
+
+            </div>
+
+            <div class="container-song-question" data-question="03">
+
+                <canvas></canvas>
+
+                <div class="container-inner-question">
+
+                    <h2>Trecho 03</h2>
+
+                    <figure class="container-player">
+
+                        <figcaption>Ouça este trecho:</figcaption>
+                        <audio
+                            controls
+                            src="../media/03-flor-do-mal.mp3">
+                                <a href="../media/03-flor-do-mal.mp3">
+                                    Baixar o trecho
+                                </a>
+                        </audio>
+
+                    </figure>
+        
+                    <div class="container-palette">
+                        
+                        <p>Que cor (ou combinação de cores) você acha que melhor corresponde a esse trecho?</p>
+        
+                        <div class="palette">
+                            <!-- Filled by JS -->
+                        </div>
+        
+                    </div>
+
+                    <p class="question-text">(Quando finalizar a seleção, por favor role a tela até a próxima música.)</p>
+
+                </div>
+
+            </div>
+
+            <div class="container-song-question" data-question="04">
+
+                <canvas></canvas>
+
+                <div class="container-inner-question">
+
+                    <h2>Trecho 04</h2>
+
+                    <figure class="container-player">
+
+                        <figcaption>Ouça este trecho:</figcaption>
+                        <audio
+                            controls
+                            src="../media/04-lamentos.mp3">
+                                <a href="../media/04-lamentos.mp3">
+                                    Baixar o trecho
+                                </a>
+                        </audio>
+
+                    </figure>
+        
+                    <div class="container-palette">
+                        
+                        <p>Que cor (ou combinação de cores) você acha que melhor corresponde a esse trecho?</p>
+        
+                        <div class="palette">
+                            <!-- Filled by JS -->
+                        </div>
+        
+                    </div>
+
+                    <p class="question-text">(Quando finalizar a seleção, por favor role a tela até a próxima música.)</p>
+
+                </div>
+
+            </div>
+
+            <div class="container-song-question" data-question="05">
+
+                <canvas></canvas>
+
+                <div class="container-inner-question">
+
+                    <h2>Trecho 05</h2>
+
+                    <figure class="container-player">
+
+                        <figcaption>Ouça este trecho:</figcaption>
+                        <audio
+                            controls
+                            src="../media/05-apanhei-te-cavaquinho.mp3">
+                                <a href="../media/05-apanhei-te-cavaquinho.mp3">
+                                    Baixar o trecho
+                                </a>
+                        </audio>
+
+                    </figure>
+        
+                    <div class="container-palette">
+                        
+                        <p>Que cor (ou combinação de cores) você acha que melhor corresponde a esse trecho?</p>
+        
+                        <div class="palette">
+                            <!-- Filled by JS -->
+                        </div>
+        
+                    </div>
+
+                    <p class="question-text">(Quando finalizar a seleção, por favor role a tela até a próxima música.)</p>
+
+                </div>
+
+            </div>
+
+            <div class="container-song-question" data-question="06">
+
+                <canvas></canvas>
+
+                <div class="container-inner-question">
+
+                    <h2>Trecho 06</h2>
+
+                    <figure class="container-player">
+
+                        <figcaption>Ouça este trecho:</figcaption>
+                        <audio
+                            controls
+                            src="../media/06-brasileirinho.mp3">
+                                <a href="../media/06-brasileirinho.mp3">
+                                    Baixar o trecho
+                                </a>
+                        </audio>
+
+                    </figure>
+        
+                    <div class="container-palette">
+                        
+                        <p>Que cor (ou combinação de cores) você acha que melhor corresponde a esse trecho?</p>
+        
+                        <div class="palette">
+                            <!-- Filled by JS -->
+                        </div>
+        
+                    </div>
+
+                    <button>Enviar</button>
+
+                    <p class="errors-text" data-status="unsent"></p>
+
+                    <p class="back-link hidden"><a href="#form">&#8593;voltar</a></p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <script src="../script.js"></script>
+    
+</body>
+</html>

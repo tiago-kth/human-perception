@@ -1,5 +1,7 @@
 /* */
 
+// language
+const lang = document.documentElement.getAttribute('lang')
 
 
 const colors = ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'violet', 'magenta'];
@@ -386,13 +388,13 @@ function validate() {
 
     let errors = [];
 
-    if (age == '') errors.push('age');
-    if (nationality == '') errors.push('nationality');
-    if (genres == '') errors.push('music genres');
+    if (age == '') errors.push(lang == 'en' ? 'age' : 'idade');
+    if (nationality == '') errors.push(lang == 'en' ? 'nationality' : 'nacionalidade');
+    if (genres == '') errors.push(lang == 'en' ? 'music genres' : 'gêneros musicais');
 
     questions.forEach(question => {
         if (question.get_colors_string() == 'empty') {
-            errors.push('color selection for excerpt ' + question.question_number)
+            errors.push( (lang == 'en' ? 'color selection for excerpt ' : 'seleção de cores para o trecho ') + question.question_number)
         }
     })
 
@@ -400,7 +402,7 @@ function validate() {
       .map(q => q.get_colors_string())
       .reduce( (pr, cv) => pr + ' ' + cv);
 
-    console.log(colors_string);
+    //console.log(colors_string);
 
     const p_msg = document.querySelector('p.errors-text');
 
@@ -408,7 +410,7 @@ function validate() {
     if (errors.length > 0) {
 
         const errors_text = errors.reduce((pr, cv) => pr + ', ' + cv);
-        p_msg.innerHTML = 'Hmm... some answers are missing. Please check: ' + errors_text;
+        p_msg.innerHTML = ( lang == 'en' ? 'Hmm... some answers are missing. Please check: ' : 'Hmm... parece que algumas respostas estão falando. Por favor, verifique: ' ) + errors_text;
         return 'error';
 
     } else {
@@ -455,7 +457,7 @@ function send() {
 
     p_msg.dataset.status = "validating";
 
-    p_msg.innerHTML = "Validating..."
+    p_msg.innerHTML = lang == 'en' ? "Validating..." : "Validando..."
 
     bk_link.classList.add('hidden');
 
@@ -471,15 +473,17 @@ function send() {
 
         api_url += ans;
 
-        console.log('will send: ', api_url);
+        //console.log('will send: ', api_url);
         p_msg.dataset.status = "sending";
 
-        p_msg.innerHTML = "Validated! Sending..."
+        p_msg.innerHTML = lang == 'en' ? "Validated! Sending..." : "Validado! Enviando..."
 
         fetch(api_url, {mode: 'no-cors'}).then(() => {
-            console.log("sent");
+            //console.log("sent");
             
-            p_msg.innerHTML = "Sent! Thank you very much for your participation! If you liked the songs, you can listen to <a href='https://www.youtube.com/watch?v=WEc2KGBMogg'>this full album on Youtube.</a> :)";
+            p_msg.innerHTML = lang == 'en' ? 
+                "Sent! Thank you very much for your participation! If you liked the songs, you can listen to <a href='https://www.youtube.com/watch?v=WEc2KGBMogg'>this full album on Youtube.</a> :)" :
+                "Enviado! Muito obrigado por sua participação! Você pode ouvir mais Chorinho <a href='https://www.youtube.com/watch?v=WEc2KGBMogg'>aqui neste link do Youtube</a>." ;
             p_msg.dataset.status = "sent";
             btn_submit.disabled = true;
             
@@ -500,3 +504,5 @@ function back_link_clicked() {
 }
 
 bk_link.addEventListener('click', back_link_clicked);
+
+console.log('Hej! Thank you for visiting! :) This was done using only vanilla HTML / CSS / JS. You can check the repository at: https://github.com/tiago-kth/human-perception/')
