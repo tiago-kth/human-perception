@@ -410,7 +410,7 @@ function validate() {
     if (errors.length > 0) {
 
         const errors_text = errors.reduce((pr, cv) => pr + ', ' + cv);
-        p_msg.innerHTML = ( lang == 'en' ? 'Hmm... some answers are missing. Please check: ' : 'Hmm... parece que algumas respostas estão falando. Por favor, verifique: ' ) + errors_text;
+        p_msg.innerHTML = ( lang == 'en' ? 'Hmm... some answers are missing. Please check: ' : 'Hmm... parece que algumas respostas estão faltando. Por favor, verifique: ' ) + errors_text;
         return 'error';
 
     } else {
