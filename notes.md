@@ -17,3 +17,9 @@ sudo ufw allow 'Nginx HTTPS' (pqp!)
 less /var/log/nginx/error.log
 
 cat /var/plumber/api/output.txt
+
+Analisar verde do Brasileirinho
+Random forest? Decision-tree
+USar o alpha conforme as diferenças
+gráfico para similarities, outro para diferenças?
+energetic music elicit more rich color responses
