@@ -78,6 +78,10 @@ class PlotGrid {
                 y0 : j * (h_side) + margin
             })
 
+            // chart.ctx.strokeStyle = 'gray';
+            // chart.ctx.strokeRect(i * (w_side) + margin, j * (h_side) + margin, w_side, h_side);
+            // chart.ctx.stroke();
+
         }
 
     }
