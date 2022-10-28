@@ -29,7 +29,7 @@ countries <- data.frame(
               "brasileira", "Brasileiro", "Brasil ", "Bra", "French", "brasileiro", 
               "Honduras ", "Chile", "Mexican", "Mexico", "Uruguayan", "Uruguay ", 
               "brasil", "", "PERU", "Bradileira", "Mexican ", "mexican", "Brazilian ", 
-              "Costarican ", "BRASILEIRO "
+              "Costarican ", "BRASILEIRO ", "Brasília ", "brasileira ", "brasil "
   ),
   
   country_clean = c("Brazil", "Netherlands", "Sweden", "Germany", "China", "Spain", 
@@ -39,7 +39,7 @@ countries <- data.frame(
                     "Brazil", "Brazil", "Brazil", "Brazil", "France", "Brazil", 
                     "Honduras", "Chile", "Mexico", "Mexico", "Uruguay", "Uruguay", 
                     "Brazil", "", "Peru", "Brazil", "Mexico", "Mexico", "Brazil",
-                    "Costa Rica", "Brazil"
+                    "Costa Rica", "Brazil", "Brazil", "Brazil", "Brazil"
   )
 )
 
@@ -53,19 +53,19 @@ colors <- c('red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'violet', 'magen
 
 data_clean <- data_raw %>%
   filter(!(country %in% c('TESTE', ''))) %>%
-  distinct() %>%
-  filter(row_number() <= 165)
+  distinct() #%>% filter(row_number() <= 165)
 
 data_pre <- data_clean %>%
   left_join(countries) %>%
   mutate(
     country_d = ifelse(country_clean == 'Brazil', 'Brazil', 'Other'),
-    age_d = ifelse(age < median(data_clean$age), 'Under 42', 'Over 42'),
+    age_d = ifelse(age < median(data_clean$age), 'Under 43', 'Over 43'),
     gender_d = ifelse(gender == 'nonbinary', 'female', gender)
   ) %>%
   tidyr::separate(colors, into = c('colors_ex1', 'colors_ex2', 'colors_ex3', 'colors_ex4', 'colors_ex5', 'colors_ex6'), sep = ' ') %>%
   mutate(id = row_number())
     
+n_participants <- nrow(data_pre)
 # data_colors <- data_pre %>%
 #   separate(colors_ex1, into = paste0('color_ex1_', color_numbers), sep = ',') %>%
 #   separate(colors_ex2, into = paste0('color_ex2_', color_numbers), sep = ',') %>%
@@ -119,74 +119,20 @@ data_long <- data_joined %>%
   left_join(excertps)
 
 
-# Random plotting / exploring ---------------------------------------------
+# Demographics ------------------------------------------------------------
 
-summary(data_clean$age)
-ggplot(data_clean) + geom_boxplot(aes(y = age))
+data_pre %>% count(country_d) %>% janitor::adorn_percentages(denominator = "col")
+data_pre %>% count(gender) %>% janitor::adorn_percentages(denominator = "col")
+data_pre %>% count(country_d, gender)
+data_pre %>% count(instrument_xp) %>% janitor::adorn_percentages(denominator = "col")
+data_pre %>% count(music_xp) %>% janitor::adorn_percentages(denominator = "col")
 
-ggplot(data_clean, aes(y = fct_rev(fct_infreq(country_clean)))) + 
-  geom_bar() +
-  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left')
-
-ggplot(data_pre, aes(y = instrument_xp)) + 
-  geom_bar() +
-  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left')
-
-ggplot(data_pre, aes(y = music_xp)) + 
-  geom_bar() +
-  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left')
-
-ggplot(data_pre, aes(y = fct_rev(fct_infreq(gender)))) + 
-  geom_bar() +
-  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left')
-
-ggplot(data_pre) +
-  geom_histogram(aes(x = age), binwidth = 1)
-
-ggplot(data_long, aes(y = fct_rev(fct_infreq(excerpt)))) + 
-  geom_bar() +
-  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left')
-
-ggplot(data_long, aes(y = fct_rev(fct_infreq(expression)))) + 
-  geom_bar() +
-  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left')
-
-
-ggplot(data_long, aes(y = fct_rev(fct_infreq(color)))) + 
-  geom_bar(aes(fill = color)) +
-  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left') +
-  scale_fill_identity() +
-  facet_wrap(~excerpt)
-
-ggplot(data_long, aes(y = fct_rev(fct_infreq(expression)))) + 
-  geom_bar() +
-  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left')
-
-
-ggplot(data_long, aes(y = fct_rev(fct_infreq(color)))) + 
-  geom_bar(aes(fill = color)) +
-  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left') +
-  scale_fill_identity() +
-  facet_wrap(~expression)
-
-
-ggplot(data_long, aes(y = fct_rev(fct_infreq(color)), group = expression)) + 
-  geom_bar(aes(fill = color), stat='count') +
-  geom_text(aes(label = scales::percent(..prop..), x = ..prop..), stat = 'count', nudge_x = 1, hjust = 'left') +
-  scale_fill_identity() +
-  facet_wrap(~expression)
-
-# de todas as vezes que <Cor> foi escolhida, <tantos>% foram em trechos Tender, tantos com Sorrow, tantos com Joy.
-ggplot(data_long, aes(y = expression, group = color)) +
-  geom_bar(aes(fill = color, x = ..prop..), stat = 'count') +
-  scale_fill_identity() +
-  facet_wrap(~color)
+summary(data_pre$age)
+ggplot(data_pre) + geom_boxplot(aes(x = age))
 
 # Counting ----------------------------------------------------------------
 
 ## General
-
-n_participants <- nrow(data_pre)
 
 color_presence <- data_long %>%
   select(id, expression, color) %>%
@@ -270,25 +216,22 @@ plot_color_count <- function(data, crit) {
     
 }
 
-# gender
-
-plot_color_count(data_long, 'gender_d')
-
-gender_difs <- get_color_count(data_long, 'gender_d') %>%
-  select(-n, -n_crit) %>%
-  spread(gender_d, pct) %>%
-  mutate(dif = male - female)
-
-ggplot(gender_difs, aes(y = color, x = dif * 100, fill = abs(dif * 100) > 10)) +
-  geom_col() +
-  #scale_x_continuous(labels = scales::percent) +
-  facet_wrap(~expression)
-
 # country
 
 country_count <- get_color_count(data_long, 'country_d')
 plot_color_count(data_long, 'country_d')
 ggsave('./plots/pct_colors_brazil_other.png', plot = last_plot(), width = 9, height = 6)
+
+## for the report
+plot_color_count(data_long %>% filter(expression == 'Joy'), 'country_d') + scale_x_continuous(labels = scales::percent, limits = c(0, .85), expand = c(0,0)) + theme(strip.text.x = element_text(size = 16, hjust = 0, margin = margin(0,0,10,0)), axis.text.y = element_blank())
+ggsave('./plots/pct_colors_brazil_other_joy.png', plot = last_plot(), width = 7, height = 6)
+
+plot_color_count(data_long %>% filter(expression == 'Tender'), 'country_d') + scale_x_continuous(labels = scales::percent, limits = c(0, .85), expand = c(0,0)) + theme(strip.text.x = element_text(size = 16, hjust = 0, margin = margin(0,0,10,0)), axis.text.y = element_blank())
+ggsave('./plots/pct_colors_brazil_other_tender.png', plot = last_plot(), width = 7, height = 6)
+
+plot_color_count(data_long %>% filter(expression == 'Sorrow'), 'country_d') + scale_x_continuous(labels = scales::percent, limits = c(0, .85), expand = c(0,0)) + theme(strip.text.x = element_text(size = 16, hjust = 0, margin = margin(0,0,10,0)), axis.text.y = element_blank())
+ggsave('./plots/pct_colors_brazil_other_sorrow.png', plot = last_plot(), width = 7, height = 6)
+
 
 countries <- get_color_count(data_long, 'country_d')
 
@@ -343,7 +286,9 @@ ggplot(data_long %>% mutate(color = factor(color, levels = colors)), aes(fill = 
         text = element_text(family = 'Arvo'))
   
 
-# highlighting the diferences
+
+# Highlighting the differences --------------------------------------------
+
 
 country_difs <- get_color_count(data_long, 'country_d') %>%
   select(-n, -n_crit) %>%
@@ -357,7 +302,7 @@ ggplot(country_difs, aes(x = color, y = dif * 100, fill = abs(dif * 100) > 20)) 
 
 ggplot(country_difs, aes(y = color, yend= color, x = 0, xend=dif * 100, color = color,
                          alpha = abs(dif * 100) > 15)) +#color = abs(dif * 100) > 20)) +
-  geom_segment(arrow = arrow(length = unit(0.05, "npc")), size = 1.5) +
+  geom_segment(arrow = arrow(length = unit(0.05, "npc")), size = 2.5) +
   scale_color_identity() +
   #scale_x_continuous(labels = scales::percent) +
   #facet_grid(vars(expression)) +
@@ -368,12 +313,141 @@ ggplot(country_difs, aes(y = color, yend= color, x = 0, xend=dif * 100, color = 
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.minor.y = element_blank(),
+        axis.text.y = element_blank(),
         axis.line.y = element_blank(),
+        strip.text = element_text(size = 16),
         legend.position = 'none',
         panel.spacing = unit(2, "lines"),
         text = element_text(family = 'Arvo'))
 
-ggsave('./plots/pct_colors_difs.png', plot = last_plot(), width = 9, height = 2)
+ggsave('./plots/pct_colors_difs.png', plot = last_plot(), width = 8, height = 2)
+
+
+# gender differences
+
+gender_difs <- get_color_count(data_long %>% filter(gender != 'non-binary'), 'gender') %>%
+  select(-n, -n_crit) %>%
+  spread(gender, pct) %>%
+  mutate(dif = female - male)
+
+ggplot(gender_difs, aes(y = color, yend= color, x = 0, xend=dif * 100, color = color,
+                         alpha = abs(dif * 100) > 10)) +#color = abs(dif * 100) > 20)) +
+  geom_segment(arrow = arrow(length = unit(0.05, "npc")), size = 2.5) +
+  scale_color_identity() +
+  #scale_x_continuous(labels = scales::percent) +
+  #facet_grid(vars(expression)) +
+  scale_alpha_manual(values = c('TRUE' = 1, 'FALSE' = .25)) +
+  labs(x = NULL, y = NULL) +
+  facet_wrap(~expression) +
+  theme_minimal() +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.line.y = element_blank(),
+        strip.text = element_text(size = 16),
+        legend.position = 'none',
+        panel.spacing = unit(2, "lines"),
+        text = element_text(family = 'Arvo'))
+
+ggsave('./plots/pct_colors_difs_gender.png', plot = last_plot(), width = 8, height = 2)
+
+# experience instrument with differences
+
+instrument_difs <- get_color_count(data_long, 'instrument_xp') %>%
+  select(-n, -n_crit) %>%
+  spread(instrument_xp, pct) %>%
+  mutate(dif = yes - no)
+
+ggplot(instrument_difs, aes(y = color, yend= color, x = 0, xend=dif * 100, color = color,
+                        alpha = abs(dif * 100) > 10)) +#color = abs(dif * 100) > 20)) +
+  geom_segment(arrow = arrow(length = unit(0.05, "npc")), size = 2.5) +
+  scale_color_identity() +
+  #scale_x_continuous(labels = scales::percent) +
+  #facet_grid(vars(expression)) +
+  scale_alpha_manual(values = c('TRUE' = 1, 'FALSE' = .25)) +
+  labs(x = NULL, y = NULL) +
+  facet_wrap(~expression) +
+  theme_minimal() +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.line.y = element_blank(),
+        strip.text = element_text(size = 16),
+        legend.position = 'none',
+        panel.spacing = unit(2, "lines"),
+        text = element_text(family = 'Arvo'))
+
+ggsave('./plots/pct_colors_difs_instrument.png', plot = last_plot(), width = 8, height = 2)
+
+
+# age
+
+age_difs <- get_color_count(data_long, 'age_d') %>%
+  select(-n, -n_crit) %>%
+  spread(age_d, pct) %>%
+  mutate(dif = `Over 43` - `Under 43`)
+
+ggplot(age_difs, aes(y = color, yend= color, x = 0, xend=dif * 100, color = color,
+                            alpha = abs(dif * 100) > 10)) +#color = abs(dif * 100) > 20)) +
+  geom_segment(arrow = arrow(length = unit(0.05, "npc")), size = 2.5) +
+  scale_color_identity() +
+  #scale_x_continuous(labels = scales::percent) +
+  #facet_grid(vars(expression)) +
+  scale_alpha_manual(values = c('TRUE' = 1, 'FALSE' = .25)) +
+  labs(x = NULL, y = NULL) +
+  facet_wrap(~expression) +
+  theme_minimal() +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.line.y = element_blank(),
+        strip.text = element_text(size = 16),
+        legend.position = 'none',
+        panel.spacing = unit(2, "lines"),
+        text = element_text(family = 'Arvo'))
+
+ggsave('./plots/pct_colors_difs_age.png', plot = last_plot(), width = 8, height = 2)
+
+
+
+# Consistency of the excerpts x emotion relationship ----------------------
+
+excertps_names <- data.frame(
+  excerpt = c('01', '02', '03', '04', '05', '06'),
+  indice = c('ex1', 'ex2', 'ex1', 'ex2', 'ex1', 'ex2'),
+  name = c('Carinhoso', 'Gosto que me enrosco', 'Flor do Mal', 'Lamentos',  'Apanhei-te Cavaquinho', 'Brasileirinho')
+)
+
+excerpts_emotions <- data_long %>% 
+  count(expression, excerpt, color) %>%
+  mutate(pct = n / n_participants) %>%
+  left_join(excertps_names) %>%
+  select(expression, color, n, indice) %>%
+  spread(indice, n) %>%
+  mutate(dif = (ex1 / ex2) - 1)
+
+
+ggplot(excerpts_emotions, aes(y = color, x = dif, fill = color)) +
+  geom_col() +
+  scale_fill_identity() +
+  theme_minimal() +
+  labs(x = NULL, y = NULL)+#, 
+  #subtitle = '(colors picked by less then 40% of the users are transparent to highlight the main picked colors)',
+  #title = 'Percentage of users that chose a given color to an excerpt of a given expression') +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        axis.line.y = element_blank(),
+        axis.line.x = element_blank(),
+        legend.position = 'none',
+        text = element_text(family = 'Arvo'),
+        panel.spacing = unit(.5, "lines")
+        #,strip.text.y = element_blank()
+  ) +
+  facet_wrap(~expression, ncol = 1)
 
 
 
@@ -464,7 +538,7 @@ ggplot(joy_01_green_yellow, aes(y = country_d, x = pct, color = country_d)) +
   scale_x_continuous(labels = scales::percent, expand = c(0,0), limits = c(0, .43)) +
   #facet_grid(vars(name), switch = 'y') +
   facet_wrap(~name, nrow = 2) +
-  labs(x = NULL, y = NULL, title = '% of participants that chose a Green-Yellow combination for the "Joy" excerpts') +
+  labs(x = NULL, y = NULL) +#, title = '% of participants that chose a Green-Yellow combination for the "Joy" excerpts') +
   theme_minimal() +
   scale_fill_manual(values = c('Brazil' = 'Forest Green', 'Other' = 'Gray')) +
   scale_color_manual(values = c('Brazil' = 'Forest Green', 'Other' = 'Gray')) +
@@ -475,7 +549,7 @@ ggplot(joy_01_green_yellow, aes(y = country_d, x = pct, color = country_d)) +
         legend.position = 'none',
         panel.spacing = unit(2, "lines"),
         text = element_text(family = 'Arvo'),
-        strip.text.x = element_text(hjust = 0, margin = margin(3,0,3,0)))
+        strip.text.x = element_text(size = 14, hjust = 0, margin = margin(3,0,3,0)))
 
 ggsave('./plots/green-yellow-joy.png', plot = last_plot(), width = 8, height = 3, bg = 'white')
 
@@ -503,13 +577,27 @@ ggplot(count_colors_excerpts, aes(y = reorder(excerpt_exp, qty), x = qty)) +
         axis.text.x = element_blank(),
         axis.line = element_blank(),
         legend.position = 'none',
-        text = element_text(family = 'Arvo'))
+        text = element_text(family = 'Arvo', size = 16))
 
-ggsave('./plots/avg_different_colors.png', plot = last_plot(), width = 8, height = 2)
-
-
+ggsave('./plots/avg_different_colors.png', plot = last_plot(), width = 8, height = 4)
 
 
+## Unit chart for number of colors
+
+table_excerpt_colors <- data_long %>%
+  select(excerpt, color) %>%
+  mutate(color = factor(color, levels = colors)) %>%
+  arrange(color) %>%
+  group_by(excerpt) %>%
+  mutate(k = row_number()) %>%
+  ungroup()
+
+table_excerpt_colors_qty <- table_excerpt_colors %>%
+  count(excerpt)
+
+ggplot(table_excerpt_colors) +
+  geom_tile(aes(x = ( (k - 1) %/% 5), y = ((k - 1) %% 5)), width = 5, height = .1, color = "white") +
+  facet_wrap(~excerpt)
 
 
 ggplot(ct_colors, aes(x = excerpt)) + geom_boxplot() 
@@ -598,14 +686,67 @@ teste <- data_long %>% filter(expression =='Sorrow', color == 'blue') %>%
   unlist()
 
 
-# o fator brasileirinho ---------------------------------------------------
-data_long %>% filter(excerpt == '06', country_d == 'Brazil') %>% count(color)
-60/120
-data_long %>% filter(excerpt == '06', country_d == 'Other') %>% count(color)
-7/45
 
-data_long %>% filter(excerpt == '05', country_d == 'Brazil') %>% count(color)
-35/120
-data_long %>% filter(excerpt == '05', country_d == 'Other') %>% count(color)
-8/45
+# Random plotting / exploring ---------------------------------------------
+
+summary(data_clean$age)
+ggplot(data_clean) + geom_boxplot(aes(y = age))
+
+ggplot(data_clean, aes(y = fct_rev(fct_infreq(country_clean)))) + 
+  geom_bar() +
+  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left')
+
+ggplot(data_pre, aes(y = instrument_xp)) + 
+  geom_bar() +
+  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left')
+
+ggplot(data_pre, aes(y = music_xp)) + 
+  geom_bar() +
+  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left')
+
+ggplot(data_pre, aes(y = fct_rev(fct_infreq(gender)))) + 
+  geom_bar() +
+  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left')
+
+ggplot(data_pre) +
+  geom_histogram(aes(x = age), binwidth = 1)
+
+ggplot(data_long, aes(y = fct_rev(fct_infreq(excerpt)))) + 
+  geom_bar() +
+  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left')
+
+ggplot(data_long, aes(y = fct_rev(fct_infreq(expression)))) + 
+  geom_bar() +
+  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left')
+
+
+ggplot(data_long, aes(y = fct_rev(fct_infreq(color)))) + 
+  geom_bar(aes(fill = color)) +
+  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left') +
+  scale_fill_identity() +
+  facet_wrap(~excerpt)
+
+ggplot(data_long, aes(y = fct_rev(fct_infreq(expression)))) + 
+  geom_bar() +
+  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left')
+
+
+ggplot(data_long, aes(y = fct_rev(fct_infreq(color)))) + 
+  geom_bar(aes(fill = color)) +
+  geom_text(aes(label = ..count.., x = ..count..), stat = 'count', nudge_x = 1, hjust = 'left') +
+  scale_fill_identity() +
+  facet_wrap(~expression)
+
+
+ggplot(data_long, aes(y = fct_rev(fct_infreq(color)), group = expression)) + 
+  geom_bar(aes(fill = color), stat='count') +
+  geom_text(aes(label = scales::percent(..prop..), x = ..prop..), stat = 'count', nudge_x = 1, hjust = 'left') +
+  scale_fill_identity() +
+  facet_wrap(~expression)
+
+# de todas as vezes que <Cor> foi escolhida, <tantos>% foram em trechos Tender, tantos com Sorrow, tantos com Joy.
+ggplot(data_long, aes(y = expression, group = color)) +
+  geom_bar(aes(fill = color, x = ..prop..), stat = 'count') +
+  scale_fill_identity() +
+  facet_wrap(~color)
 
