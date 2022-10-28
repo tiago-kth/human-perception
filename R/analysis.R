@@ -587,10 +587,13 @@ ggsave('./plots/avg_different_colors.png', plot = last_plot(), width = 8, height
 table_excerpt_colors <- data_long %>%
   select(excerpt, color) %>%
   mutate(color = factor(color, levels = colors)) %>%
-  arrange(color) %>%
+  arrange(excerpt, color) %>%
   group_by(excerpt) %>%
   mutate(k = row_number()) %>%
-  ungroup()
+  ungroup() %>%
+  left_join(excertps_names)
+
+jsonlite::write_json(table_excerpt_colors, '../vis/unit-chart.json')
 
 table_excerpt_colors_qty <- table_excerpt_colors %>%
   count(excerpt)
