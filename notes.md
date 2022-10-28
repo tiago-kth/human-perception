@@ -23,3 +23,8 @@ Random forest? Decision-tree
 USar o alpha conforme as diferenças
 gráfico para similarities, outro para diferenças?
 energetic music elicit more rich color responses
+
+ok 1. Demographic data
+ok 2. Gráfico das diferenças para os cortes
+3. Gráfico quadrados
+4. comparação entre excerpts
