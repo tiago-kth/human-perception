@@ -1,6 +1,7 @@
 library(tidyverse)
 library(forcats)
 library(showtext)
+library(patchwork)
 font_add_google('Arvo')
 
 data_raw <- read.csv2('./api/output.txt', header = FALSE)
@@ -140,23 +141,31 @@ color_presence <- data_long %>%
   count(expression, color) %>%
   mutate(pct = n / n_participants)
 
-ggplot(color_presence, aes(y = color, x = pct, fill = color, alpha = ifelse(pct >= .45, 'strong', 'weak'))) +
+plot_general_count <- function(exp) {
+  ggplot(color_presence %>% filter(expression == exp), aes(y = reorder(color, pct), x = pct, fill = color)) +
   geom_col() +
   scale_fill_identity() +
-  scale_x_continuous(labels = scales::percent) +
+  scale_x_continuous(labels = scales::percent, expand = c(0,0), limits = c(0, .65)) +
   scale_alpha_manual(values = c('strong' = 1, 'weak' = .1)) +
-  facet_wrap(~expression) +
   theme_minimal() +
-  labs(x = NULL, y = NULL, 
-       subtitle = '(colors picked by less then 45% of the users are transparent to highlight the main picked colors)',
-       title = 'Percentage of users that chose a given color to an excerpt of a given expression') +
+  labs(x = NULL, y = NULL, title = exp) +
+       #subtitle = '(colors picked by less then 45% of the users are transparent to highlight the main picked colors)',
+       #title = 'Percentage of users that chose a given color to an excerpt of a given expression') +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.minor.y = element_blank(),
+        axis.text.y = element_blank(),
         legend.position = 'none',
         text = element_text(family = 'Arvo'))
+}
 
-ggsave('./plots/pct_colors_all.png', plot = last_plot(), width = 9, height = 4)
+plot_joy <- plot_general_count('Joy')
+plot_tender <- plot_general_count('Tender')
+plot_sorrow <- plot_general_count('Sorrow')
+
+plot_joy + plot_tender + plot_sorrow + plot_layout(ncol = 1)
+
+ggsave('./plots/general_preferences.png', plot = last_plot(), width = 5, height = 7)
   
 ggplot(color_presence, aes(x = color, y = pct, fill = color, group = expression)) +
   geom_col() +
@@ -411,6 +420,44 @@ ggplot(age_difs, aes(y = color, yend= color, x = 0, xend=dif * 100, color = colo
 
 ggsave('./plots/pct_colors_difs_age.png', plot = last_plot(), width = 8, height = 2)
 
+## Yellow and Age
+
+plot_color_count(data_long, 'age_d')
+
+count_age <- data_pre %>%
+  count(age_d) %>%
+  rename(n_crit = n)
+
+age_diffs_yellow <- data_long %>%
+  filter(color == 'yellow') %>%
+  select(id, expression, excerpt, age_d) %>%
+  distinct() %>% #with that, we're focusing on different colors chosen by the user for a given expression
+  mutate(excerpt = paste0(excerpt, ' (', expression, ')')) %>%
+  count(excerpt, age_d) %>%
+  left_join(count_age) %>%
+  mutate(pct = n / n_crit) %>%
+  select(-n, -n_crit) %>%
+  spread(age_d, pct) %>%
+  mutate(dif = `Over 43` - `Under 43`)
+
+ggplot(age_diffs_yellow, aes(y = excerpt, yend= excerpt, x = 0, xend=dif * 100, color = color)) +
+                     #alpha = abs(dif * 100) > 10)) +#color = abs(dif * 100) > 20)) +
+  geom_segment(arrow = arrow(length = unit(0.05, "npc")), size = 2.5, color = "#333333") +
+  #scale_x_continuous(labels = scales::percent) +
+  #facet_grid(vars(expression)) +
+  scale_alpha_manual(values = c('TRUE' = 1, 'FALSE' = .25)) +
+  labs(x = NULL, y = NULL) +
+  theme_minimal() +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        axis.line.y = element_blank(),
+        strip.text = element_text(size = 16),
+        legend.position = 'none',
+        panel.spacing = unit(2, "lines"),
+        text = element_text(family = 'Arvo', size = 18))
+
+ggsave('./plots/pct_colors_difs_age_yellow.png', plot = last_plot(), width = 7, height = 3)
 
 
 # Consistency of the excerpts x emotion relationship ----------------------
@@ -427,7 +474,12 @@ excerpts_emotions <- data_long %>%
   left_join(excertps_names) %>%
   select(expression, color, n, indice) %>%
   spread(indice, n) %>%
-  mutate(dif = (ex1 / ex2) - 1)
+  mutate(dif = ifelse(ex1 > ex2, ex1 / ex2 - 1, ex2 / ex1 - 1))
+
+excerpts_emotions2 <- data_long %>% 
+  count(expression, excerpt, color) %>%
+  mutate(pct = n / n_participants) %>%
+  left_join(excertps_names)
 
 
 ggplot(excerpts_emotions, aes(y = color, x = dif, fill = color)) +
@@ -435,6 +487,7 @@ ggplot(excerpts_emotions, aes(y = color, x = dif, fill = color)) +
   scale_fill_identity() +
   theme_minimal() +
   labs(x = NULL, y = NULL)+#, 
+  scale_x_continuous(labels = scales::percent, expand = c(0,0)) +
   #subtitle = '(colors picked by less then 40% of the users are transparent to highlight the main picked colors)',
   #title = 'Percentage of users that chose a given color to an excerpt of a given expression') +
   theme(panel.grid.major.y = element_blank(),
@@ -443,12 +496,79 @@ ggplot(excerpts_emotions, aes(y = color, x = dif, fill = color)) +
         axis.line.y = element_blank(),
         axis.line.x = element_blank(),
         legend.position = 'none',
-        text = element_text(family = 'Arvo'),
+        text = element_text(family = 'Arvo', size = 14),
+        axis.text.y = element_blank(),
+        strip.text = element_text(hjust = 0, size = 16),
         panel.spacing = unit(.5, "lines")
         #,strip.text.y = element_blank()
   ) +
   facet_wrap(~expression, ncol = 1)
 
+ggsave('./plots/differences_excerpts.png', plot = last_plot(), width = 4, height = 5)
+
+
+excerpts_emotions_radial <- data_long %>% 
+  count(expression, excerpt, color) %>%
+  mutate(pct = n / n_participants) %>%
+  left_join(excertps_names) %>%
+  select(expression, color, n, excerpt = indice)
+
+excerpts_largest <- excerpts_emotions_radial %>%
+  spread(excerpt, n) %>%
+  mutate(largest = ifelse(ex1 > ex2, 'ex1', 'ex2')) %>%
+  select(expression, color, largest)
+
+excerpts_emotions_compari <- excerpts_emotions_radial %>%
+  left_join(excerpts_largest) %>%
+  mutate(tipo = ifelse(excerpt == largest, '1', '2')) %>%
+  arrange(expression, color, tipo)
+
+
+
+ggplot(excerpts_emotions_radial, aes(x = color, y = n, color = excerpt, group = excerpt)) +
+  geom_line() +
+  #coord_polar() +
+  theme_minimal() +
+  labs(x = NULL, y = NULL)+#, 
+  #subtitle = '(colors picked by less then 40% of the users are transparent to highlight the main picked colors)',
+  #title = 'Percentage of users that chose a given color to an excerpt of a given expression') +
+  theme(#panel.grid.major.y = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_blank(),
+    legend.position = 'none',
+    text = element_text(family = 'Arvo'),
+    panel.spacing = unit(.5, "lines")
+    #,strip.text.y = element_blank()
+  ) +
+  facet_wrap(~expression, ncol = 1)
+
+ggplot(excerpts_emotions_compari, aes(x = color, y = n, fill = color, group = tipo)) + #, alpha = tipo)) +
+  geom_col(position = position_dodge2()) +#position = position_dodge2(), width = .8) +
+  scale_fill_identity() +
+  scale_alpha_manual(values = c('1' = 1, '2' = .5)) +
+  #coord_polar() +
+  theme_minimal() +
+  labs(x = NULL, y = NULL)+#, 
+  #subtitle = '(colors picked by less then 40% of the users are transparent to highlight the main picked colors)',
+  #title = 'Percentage of users that chose a given color to an excerpt of a given expression') +
+  theme(#panel.grid.major.y = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_blank(),
+    axis.text.x = element_blank(),
+    legend.position = 'none',
+    strip.text = element_text(hjust = 0, size = 16),
+    text = element_text(family = 'Arvo'),
+    panel.spacing = unit(.5, "lines")
+    #,strip.text.y = element_blank()
+  ) +
+  facet_wrap(~expression, ncol = 1)
+
+ggsave('./plots/differences_excerpts_side_side.png', plot = last_plot(), width = 4, height = 5)
 
 
 # Analysis of Brasileirinho -----------------------------------------------
@@ -565,7 +685,7 @@ count_colors_excerpts <- data_long %>%
 
 ggplot(count_colors_excerpts, aes(y = reorder(excerpt_exp, qty), x = qty)) +
   geom_col(fill = "#EA5F94", width = .5) + 
-  geom_text(aes(label = scales::number(qty, accuracy = .01)), nudge_x = .1, family = 'Arvo') +
+  geom_text(aes(label = scales::number(qty, accuracy = .01)), nudge_x = .1, family = 'Arvo', size = 5) +
   labs(x = NULL, y = NULL)+ #, 
        #title = 'Average number of different colors chosen by participants for each excerpt') +
   scale_x_continuous(expand = c(0,0), limits = c(0,2.5)) +
@@ -577,7 +697,7 @@ ggplot(count_colors_excerpts, aes(y = reorder(excerpt_exp, qty), x = qty)) +
         axis.text.x = element_blank(),
         axis.line = element_blank(),
         legend.position = 'none',
-        text = element_text(family = 'Arvo', size = 16))
+        text = element_text(family = 'Arvo', size = 18))
 
 ggsave('./plots/avg_different_colors.png', plot = last_plot(), width = 8, height = 4)
 
@@ -585,7 +705,7 @@ ggsave('./plots/avg_different_colors.png', plot = last_plot(), width = 8, height
 ## Unit chart for number of colors
 
 table_excerpt_colors <- data_long %>%
-  select(excerpt, color) %>%
+  select(excerpt, color, expression) %>%
   mutate(color = factor(color, levels = colors)) %>%
   arrange(excerpt, color) %>%
   group_by(excerpt) %>%
