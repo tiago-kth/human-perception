@@ -201,7 +201,7 @@ plot_color_count <- function(data, crit) {
   
   df <- get_color_count(data, crit)
   
-  ggplot(df, aes(y = color, x = pct, fill = color, alpha = ifelse(pct >= .4, 'strong', 'weak'))) +
+  ggplot(df, aes(y = color, x = pct, fill = color)) + #, alpha = ifelse(pct >= .4, 'strong', 'weak'))) +
     geom_col() +
     scale_fill_identity() +
     scale_x_continuous(labels = scales::percent) +
@@ -230,6 +230,14 @@ plot_color_count <- function(data, crit) {
 country_count <- get_color_count(data_long, 'country_d')
 plot_color_count(data_long, 'country_d')
 ggsave('./plots/pct_colors_brazil_other.png', plot = last_plot(), width = 9, height = 6)
+
+# genre, Brazil
+genre_count <- get_color_count(data_long %>% filter(country_d == 'Brazil'), 'gender_d')
+plot_color_count(data_long %>% filter(country_d == 'Brazil'), 'gender_d')
+ggsave('./plots/pct_colors_brazil_gender.png', plot = last_plot(), width = 9, height = 6)
+
+plot_color_count(data_long %>% filter(country_d == 'Other'), 'gender_d')
+ggsave('./plots/pct_colors_other_gender.png', plot = last_plot(), width = 9, height = 6)
 
 ## for the report
 plot_color_count(data_long %>% filter(expression == 'Joy'), 'country_d') + scale_x_continuous(labels = scales::percent, limits = c(0, .85), expand = c(0,0)) + theme(strip.text.x = element_text(size = 16, hjust = 0, margin = margin(0,0,10,0)), axis.text.y = element_blank())
